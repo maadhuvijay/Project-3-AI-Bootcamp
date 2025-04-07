@@ -7,34 +7,53 @@
 2. Image selection: Each lego piece has 800 images. Total 1132 Images for 4 lego brick pieces -2357, 3001,3010,3022 [283 each] were chosen
 3. Lego images used: The front and top angle of pieces were chosed. 
 
-## Data Exploration
+## Data Visualization
 The lego image was printed / plotted to ensure the import was successful.
 
+![image](https://github.com/user-attachments/assets/a0f4e6ec-d309-4c9a-a215-95b2d18cca7f)
 
-![image](https://github.com/user-attachments/assets/1668dcd7-ae98-498c-b31f-32fbc03d2bf4)
+
+
 
 
 ## Data Pre-processing
 
 Below pre-processing steps were done on the lego images. 
 
-1. Re-sizing of the images to 224 x 224 from 400 x 400.
-   
-   ![image](https://github.com/user-attachments/assets/2fa077f2-05a7-4a7e-8f84-407ea93a2752)
+1. Re-sizing of the images:
+      Initially the images were re-sized to 60 x 60 but then there was a difference in the image clarity. The edges of the images were not as clear as the ones with bigger size. Later the image size was changed to 224 x 224 as part of enhancing the image processing
+
+   ![image](https://github.com/user-attachments/assets/3f502e36-169f-4c85-b57c-fd67e4cc6ec6)
+   ![image](https://github.com/user-attachments/assets/9875ea42-6ec0-4648-9631-bc51be5eb111)
 
 
-2. Edge detection and Dilation of edges were done on the images to make the edges prominent.
+3. Edge detection and Dilation of edges were done on the images to make the edges prominent.
+
+   ![image](https://github.com/user-attachments/assets/d0bd86d0-70b2-4e69-9eab-eb39af337b87)
+   ![image](https://github.com/user-attachments/assets/c1a99fdf-dd43-4dda-812e-dc45dcfe72eb)
+
+  
+3. Normalize the image so that the pixel values are between 0 and 1.   
+
+### Padding
+
+Padding turned out be an important step in getting more accuracy in this model training
+
+The images were padded by re-sizing it into 128 x 128 within the image frame.This was done because, after augmentation images with bigger brick size were not fitting inside the frame and created extra pixels are had part of the image truncated.
+
+**Before padding** [Note: During the augmentation analysis, I intermittently removed the edge detection and dilating edges transformations from pre-processing and that is why the before padding images are different]
+
+   ![image](https://github.com/user-attachments/assets/f9450e9a-2ff6-4b4a-8142-be0f784b7669)
+   ![image](https://github.com/user-attachments/assets/7f858ede-bf30-4ea1-82e9-136d0666831b)
+   ![image](https://github.com/user-attachments/assets/26256330-4523-4e7e-a396-9e4c64d19b3a)
+
+**After Padding** [These after -padding images were taken once the edge detection and Dilation edges preprocessing steps were added back]
 
 
-![image](https://github.com/user-attachments/assets/9e2cf0ac-671e-457f-b8c0-da946a331f1d)
-
-
-
-3. The images were then added padded to re-size it into 128 x 128 within the image .
-4. Normalize the image so that the pixel values are between 0 and 1.
-5. The images were converted to grayscale and were added channel dimension 1 for grayscale image.
-
-![image](https://github.com/user-attachments/assets/5b3fb759-15c2-471b-8614-299e78d1bc92)
+   ![image](https://github.com/user-attachments/assets/11194b5a-144f-4ac5-af83-abf70c1ff81e)
+   ![image](https://github.com/user-attachments/assets/fe8aa147-d9af-4514-b9b7-becadd5bafc6)
+   ![image](https://github.com/user-attachments/assets/87b1be22-95c9-4fc9-8423-eac1dddf2893)
+   ![image](https://github.com/user-attachments/assets/b3bebc23-b2b4-4efd-bccc-144fd4e496ca)
 
 ## Training testing data split
 1. The normalized images are the X data.
@@ -42,10 +61,23 @@ Below pre-processing steps were done on the lego images.
 
 
 ## Image Augmentation
-The 1132 images were then augmented to add more diverse images to the dataset.
+The images were augmented to add more diverse images to the dataset.
 
-Below **random transformations** were performed.
+Below **random transformations** were initially considered. 
 
+   1. RandomRotation(0.2)
+   2. RandomTranslation(0.1, 0.1)
+   3. RandomFlip('horizontal'),
+   4. Random Zoom
+
+Problems identified with Random roatation, and random translation transformations [ Images with extra pixels and blank images]
+
+   ![image](https://github.com/user-attachments/assets/aeee6718-aad3-43f9-b2df-e96930669456)
+   ![image](https://github.com/user-attachments/assets/015ae759-b606-4154-8bc8-818c83d299e4)
+   ![image](https://github.com/user-attachments/assets/c2d5e244-e9bf-437b-b94a-a768ed007cf2)
+
+**Updated Augmentation:** Random rotation and random translation was removed and Random flip (Vertical) was added instead which resolved these problems 
+   
 1. Random flip (Horizonatl)
 2. Random Zoom
 3. Random flip (Vertical)
