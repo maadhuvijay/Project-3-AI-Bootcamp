@@ -3,12 +3,12 @@
 
 ## Dataset collection
 
-1. Source: Lego images from Kaggle
-2. Image selection: Each lego piece has 800 images. 3 Lego pieces (2400 images) were chosen for this classification project.
-3. Lego images used:
+1. Source: Lego images from Kaggle [https://www.kaggle.com/code/stpeteishii/lego-bricks-classify-torch-linear-conv2d]
+2. Image selection: Each lego piece has 800 images. Total 1132 Images for 4 lego brick pieces -2357, 3001,3010,3022 [283 each] were chosen
+3. Lego images used: The front and top angle of pieces were chosed. 
 
 ## Data Exploration
-Print an image to ensure the import was successful.
+The lego image was printed / plotted to ensure the import was successful.
 
 
 ![image](https://github.com/user-attachments/assets/1668dcd7-ae98-498c-b31f-32fbc03d2bf4)
@@ -16,41 +16,93 @@ Print an image to ensure the import was successful.
 
 ## Data Pre-processing
 
-Re-size the image to be used to train the model.
-Normalize the image so that the pixel values are between 0 and 1
-Process the filename and map it to the image features.
-Plot the image to check the image displays.
+Below pre-processing steps were done on the lego images. 
 
-![image](https://github.com/user-attachments/assets/d25f328b-3fbe-4243-a2e1-30bba001a074)
+1. Re-sizing of the images to 224 x 224 from 400 x 400.
+   
+   ![image](https://github.com/user-attachments/assets/2fa077f2-05a7-4a7e-8f84-407ea93a2752)
 
+
+2. Edge detection and Dilation of edges were done on the images to make the edges prominent.
+
+
+![image](https://github.com/user-attachments/assets/9e2cf0ac-671e-457f-b8c0-da946a331f1d)
+
+
+
+3. The images were then added padded to re-size it into 128 x 128 within the image .
+4. Normalize the image so that the pixel values are between 0 and 1.
+5. The images were converted to grayscale and were added channel dimension 1 for grayscale image.
+
+![image](https://github.com/user-attachments/assets/5b3fb759-15c2-471b-8614-299e78d1bc92)
+
+## Training testing data split
+1. The normalized images are the X data.
+2. The design ID of the lego piece is the target column (y)
 
 
 ## Image Augmentation
-The dataset has 800 images for each lego piece depicting different angles and rotations. As an inital thought, I decided not to further augment the images.
+The 1132 images were then augmented to add more diverse images to the dataset.
 
-## Training data
-1. Choose the normalized images as X
-2. The design ID of the lego piece is the target column (y)
-3. Split the images into training and testing datasets
+Below **random transformations** were performed.
+
+1. Random flip (Horizonatl)
+2. Random Zoom
+3. Random flip (Vertical)
 
 ## Converting the y-data to numerical data
-1. One hot encode the y-data to numerical values. 
+1. The y-column with Lego design id's were encoded to numerical data through **One-hot encoding**. 
 
 
 
-## Model selection
+# Model selection
 
-CNN was chosen to train the model for this Lego image classification due to its capability of classifying images. 
+
+**CNN model** was built and trained to classify these Lego images due to its capability of classifying images. 
+
+The model was created with 3 Convulation layers, 1 flatten layer and 2 dense layers and one of them being the output layer.
+
+![image](https://github.com/user-attachments/assets/d8e1b5bc-d1b6-45b7-8c44-094928db45b3)
+
 
 ## Model training
 
+The model was trained with
+
+1. Activation funcitons **"relu"** on the convolution layers and **"softmax"** for the output layer as this is a multi-class image classification problem.
+2. The model used **"categorical cross entropy"** for the loss function and measured **"Accuracy"** as the validation metric.
+3. **Early stopping** is used as a training technique used to prevent overfitting in the model.
 
 ## Model Optimization
 
-Below parameters were used to optimize the Model
+4 models were built: 1 main model and 3 models to analyze the below optimatization techniques.
+
+1. **L1 regularization**
 
 
-## Model predictions
+  ![image](https://github.com/user-attachments/assets/ca3cf1ac-aec6-4a99-b0b2-ea6dd4b96838)
+  ![image](https://github.com/user-attachments/assets/a73e5220-09ca-4283-9609-b1447dfb0aa6)
+
+
+2. **L2 regularization**
+
+   ![image](https://github.com/user-attachments/assets/a2d91fe9-8013-4d28-83c5-b4bd6521b0bd)
+   ![image](https://github.com/user-attachments/assets/9eabd546-c69d-4c30-97a0-d66116c21692)
+
+
+4. **Dropouts**
+
+   The dropouts model also showed a similar results like L2 regularization technique and not more deviated results like L1 regularization
+
+**In the final model**, it was decided 
+
+   1. To add a dropout later after the dense layer
+   2. To add L2 regularizer to the layers with higher parameters. 
+
+## Model evaluation
+## Model prediction
+
+## Gradio - User Inferface
 
 
 
